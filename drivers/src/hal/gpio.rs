@@ -1,0 +1,89 @@
+//! GPIO (General Purpose Input/Output) Hardware Abstraction
+
+use aero_types::{AeroError, AeroResult};
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum GPIOMode {
+    Input,
+    Output,
+    Alternate,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum GPIOLevel {
+    Low,
+    High,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum PullMode {
+    NoPull,
+    PullUp,
+    PullDown,
+}
+
+pub struct GPIO {
+    pin: u8,
+    mode: GPIOMode,
+}
+
+impl GPIO {
+    pub fn new(pin: u8) -> Self {
+        Self {
+            pin,
+            mode: GPIOMode::Input,
+        }
+    }
+
+    pub fn set_mode(&mut self, mode: GPIOMode) -> AeroResult<()> {
+        self.mode = mode;
+        Self::configure_pin(self.pin, mode)?;
+        Ok(())
+    }
+
+    pub fn set_level(&self, level: GPIOLevel) -> AeroResult<()> {
+        if self.mode != GPIOMode::Output {
+            return Err(AeroError::InvalidParameter);
+        }
+        Self::write_pin(self.pin, level)?;
+        Ok(())
+    }
+
+    pub fn get_level(&self) -> AeroResult<GPIOLevel> {
+        Self::read_pin(self.pin)
+    }
+
+    pub fn set_pull(&mut self, pull: PullMode) -> AeroResult<()> {
+        Self::configure_pull(self.pin, pull)?;
+        Ok(())
+    }
+
+    #[inline(always)]
+    fn configure_pin(pin: u8, mode: GPIOMode) -> AeroResult<()> {
+        let _ = pin;
+        let _ = mode;
+        Ok(())
+    }
+
+    #[inline(always)]
+    fn write_pin(pin: u8, level: GPIOLevel) -> AeroResult<()> {
+        let _ = pin;
+        let _ = level;
+        Ok(())
+    }
+
+    #[inline(always)]
+    fn read_pin(pin: u8) -> AeroResult<GPIOLevel> {
+        let _ = pin;
+        Ok(GPIOLevel::Low)
+    }
+
+    #[inline(always)]
+    fn configure_pull(pin: u8, pull: PullMode) -> AeroResult<()> {
+        let _ = pin;
+        let _ = pull;
+        Ok(())
+    }
+}
+
+pub fn init() {}

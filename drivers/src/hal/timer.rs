@@ -1,5 +1,4 @@
 //! Timer Hardware Abstraction
-//! Used for real-time scheduling, PWM, and timing-critical operations
 
 use aero_types::AeroResult;
 
@@ -39,13 +38,11 @@ impl Timer {
     }
 
     pub fn set_frequency(&mut self, frequency_hz: u32) -> AeroResult<()> {
-        self.frequency_hz = frequency_hz;
         let period_us = 1_000_000 / frequency_hz;
         Self::timer_set_period(self.id, period_us)?;
         Ok(())
     }
 
-    // Platform-specific implementations
     #[inline(always)]
     fn init_timer(id: u8, _freq: u32) -> AeroResult<()> {
         let _ = id;
@@ -83,6 +80,4 @@ impl Timer {
     }
 }
 
-pub fn init() {
-    // Initialize timer peripherals
-}
+pub fn init() {}

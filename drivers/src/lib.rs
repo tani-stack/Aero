@@ -1,21 +1,28 @@
+//! Aero OS Device Drivers
+//! Comprehensive driver support for sensors, motors, and hardware peripherals
+
 #![no_std]
-pub mod barometer;
+
+extern crate alloc;
+
+pub mod hal;
 pub mod bus;
-pub mod camera;
-pub mod gps;
 pub mod imu;
+pub mod gps;
+pub mod barometer;
 pub mod lidar;
 pub mod motor;
-pub mod traits;
-
-// NEW: Multi-vehicle support
+pub mod motor_types;
 pub mod motor_generic;
 pub mod sensor_generic;
+pub mod camera;
 pub mod vehicle;
+pub mod traits;
 
-pub use traits::Driver;
-pub use vehicle::{Vehicle, VehicleType, Drone, Car, Robot, RobotType};
-pub use motor_generic::{DcMotor, ServoMotor, StepperMotor, BrushlessMotor, MotorError};
-pub use sensor_generic::{
-    DistanceSensor, Encoder, TemperatureSensor, CurrentSensor, LimitSwitch, SensorError,
-};
+use aero_types::AeroResult;
+
+/// Initialize all drivers and hardware
+pub fn init_all() -> AeroResult<()> {
+    hal::init();
+    Ok(())
+}
