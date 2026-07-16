@@ -1,1 +1,1 @@
-pub struct ZeroCopyRing { pub buf: [[u8; 256]; 64], pub head: usize, pub tail: usize } impl ZeroCopyRing { pub fn push(&mut self, d: [u8;256]) { self.buf[self.head%64]=d; self.head+=1; } }
+pub struct ZeroCopyRing{pub buf:[[u8;256];64],pub head:usize,pub tail:usize} impl ZeroCopyRing{pub const fn new()->Self{Self{buf:[[0;256];64],head:0,tail:0}} pub fn push(&mut self,d:[u8;256]){ self.buf[self.head%64]=d; self.head+=1; } pub fn pop(&mut self)->Option<[u8;256]>{ if self.tail==self.head{None}else{let v=self.buf[self.tail%64]; self.tail+=1; Some(v)} } }

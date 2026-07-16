@@ -1,1 +1,1 @@
-pub struct Watchdog; impl Watchdog { pub fn kick(&mut self) {} pub fn is_expired(&self)->bool { false } }
+pub struct Watchdog{ last_kick:u64, timeout_ms:u64 } impl Watchdog{ pub const fn new(to_ms:u64)->Self{Self{last_kick:0,timeout_ms:to_ms}} pub fn kick(&mut self, now_ms:u64){ self.last_kick=now_ms; } pub fn is_expired(&self, now_ms:u64)->bool{ now_ms-self.last_kick > self.timeout_ms } pub fn pet_hw(&self){ #[cfg(target_arch="aarch64")] unsafe{ core::arch::asm!("mov x0, #0x76; msr OSDTRRX_EL1, x0", options(nostack)); } } }

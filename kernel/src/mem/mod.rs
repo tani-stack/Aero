@@ -1,1 +1,1 @@
-pub mod heap; pub mod paging; pub mod frame; pub fn init_frame_allocator() {}
+pub mod heap; pub mod paging; pub mod frame; pub fn init_frame_allocator(){ } pub use heap::init_heap;

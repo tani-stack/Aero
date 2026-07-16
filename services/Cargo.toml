@@ -1,7 +1,2 @@
-[package]
-name = "aero-services"
-version.workspace = true
-edition.workspace = true
-[dependencies]
-aero-types = { path = "../libs/aero-types" }
-aero-drivers = { path = "../drivers" }
+[package] name="aero-services" version.workspace=true edition.workspace=true
+[dependencies] aero-types = { workspace=true } aero-drivers = { path="../drivers" } heapless = { workspace=true }

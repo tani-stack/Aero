@@ -1,1 +1,1 @@
-pub struct Message { pub from: u64, pub to: u64, pub payload: [u8; 256], pub len: usize }
+#[derive(Clone,Copy)] pub struct Message{pub from:u64,pub to:u64,pub len:u16,pub payload:[u8;256]} impl Message{pub fn new(f:u64,t:u64,d:&[u8])->Self{ let mut p=[0u8;256]; let l=d.len().min(256); p[..l].copy_from_slice(&d[..l]); Self{from:f,to:t,len:l as u16,payload:p}} }

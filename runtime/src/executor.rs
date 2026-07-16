@@ -1,3 +1,5 @@
-use core::future::Future; use core::pin::Pin; use core::task::{Context, Poll};
-pub struct NoAllocExecutor;
-impl NoAllocExecutor { pub fn spawn<F: Future<Output=()> + 'static>(&self, _f: F) {} pub fn run(&self) -> ! { loop { core::hint::spin_loop(); } } }
+use core::future::Future; use core::pin::Pin; use core::task::{Context,Poll,Waker,RawWaker,RawWakerVTable}; use spin::Mutex; use heapless::mpmc::Q64;
+static Q:Mutex<Q64<usize>>=Mutex::new(Q64::new()); static SLOTS:Mutex<[Option<Slot>;64]>=Mutex::new([const{None};64]);
+struct Slot{ fut:Option<Pin<&'static mut dyn Future<Output=()>>>, }
+fn waker()->Waker{ fn c(_:*const())->RawWaker{RawWaker::new(core::ptr::null(),&V)} fn w(_:*const()){} fn wr(_:*const()){} fn d(_:*const()){} static V:RawWakerVTable=RawWakerVTable::new(c,w,wr,d); unsafe{Waker::from_raw(RawWaker::new(core::ptr::null(),&V))} }
+pub struct NoAllocExecutor; impl NoAllocExecutor{ pub const fn new()->Self{Self} pub fn spawn<F:Future<Output=()>+'static>(&self,f:F)->Result<(),()>{ let mut s=SLOTS.lock(); for i in 0..64{ if s[i].is_none(){ let b=Box::new(f); let l: &'static mut dyn Future<Output=()>=unsafe{core::mem::transmute(Box::leak(b) as *mut _)}; s[i]=Some(Slot{fut:Some(unsafe{Pin::new_unchecked(l)})}); Q.lock().enqueue(i).map_err(|_|())?; return Ok(());} } Err(()) } pub fn run(&self)->!{ let w=waker(); let mut cx=Context::from_waker(&w); loop{ if let Some(i)=Q.lock().dequeue(){ let mut g=SLOTS.lock(); if let Some(mut sl)=g[i].take(){ if let Some(mut f)=sl.fut.take(){ drop(g); match f.as_mut().poll(&mut cx){ Poll::Ready(())=>{}, Poll::Pending=>{ SLOTS.lock()[i]=Some(Slot{fut:Some(f)}); Q.lock().enqueue(i).ok(); } } } } } else { unsafe{core::arch::asm!("wfi")} } } } }

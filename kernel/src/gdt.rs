@@ -1,1 +1,1 @@
-pub fn init() {}
+pub fn init(){ #[cfg(target_arch="x86_64")] { use x86_64::structures::gdt::{GlobalDescriptorTable,Descriptor}; let mut gdt=GlobalDescriptorTable::new(); gdt.add_entry(Descriptor::kernel_code_segment()); gdt.load(); } }

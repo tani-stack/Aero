@@ -1,4 +1,4 @@
 [toolchain]
-channel = "nightly"
-components = ["rust-src", "llvm-tools-preview", "rust-analyzer"]
-targets = ["aarch64-unknown-none", "riscv64gc-unknown-none-elf"]
+channel = "nightly-2026-06-01"
+components = ["rust-src","llvm-tools-preview","rust-analyzer","clippy"]
+targets = ["aarch64-unknown-none","x86_64-unknown-none","riscv64gc-unknown-none-elf"]
