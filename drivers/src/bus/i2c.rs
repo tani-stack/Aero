@@ -1,2 +1,10 @@
-#[derive(Debug)] pub enum I2cError { Nack, BusFault }
-pub trait I2cBus { fn write(&mut self, addr:u8, data:&[u8])->Result<(),I2cError>; fn read(&mut self, addr:u8, buf:&mut [u8])->Result<(),I2cError>; }
+#[derive(Debug)]
+pub enum I2cError {
+    Nack,
+    BusFault,
+}
+
+pub trait I2cBus {
+    fn write(&mut self, addr: u8, data: &[u8]) -> Result<(), I2cError>;
+    fn read(&mut self, addr: u8, buf: &mut [u8]) -> Result<(), I2cError>;
+}

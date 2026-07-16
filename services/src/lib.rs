@@ -1,1 +1,6 @@
-pub mod flight_control; pub mod battery; pub mod navigation; pub mod failsafe;
+#![no_std]
+
+pub mod battery;
+pub mod failsafe;
+pub mod flight_control;
+pub mod navigation;

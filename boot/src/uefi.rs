@@ -1,11 +1,16 @@
 pub type Handle = *mut u8;
 pub type Status = usize;
-#[repr(C)] pub struct SystemTable { _pad: [u8; 64] }
+#[repr(C)]
+pub struct SystemTable {
+    _pad: [u8; 64],
+}
 
 static mut CONSOLE_OUT: *mut u8 = core::ptr::null_mut();
 
 pub fn init_console(st: *mut SystemTable) {
-    unsafe { CONSOLE_OUT = st as *mut u8; }
+    unsafe {
+        CONSOLE_OUT = st as *mut u8;
+    }
     // Real: get ConOut via gST->ConOut
 }
 

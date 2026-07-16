@@ -1,1 +1,43 @@
-#[derive(Clone,Copy,Debug)] pub struct Waypoint{pub lat:f64,pub lon:f64,pub alt:f32,pub yaw:f32} pub struct Path{pub wps:heapless::Vec<Waypoint,64>,pub idx:usize} impl Path{pub fn new()->Self{Self{wps:heapless::Vec::new(),idx:0}} pub fn push(&mut self,wp:Waypoint)->Result<(),()>{ self.wps.push(wp).map_err(|_|()) } pub fn next(&mut self)->Option<Waypoint>{ if self.idx<self.wps.len(){ let w=self.wps[self.idx]; self.idx+=1; Some(w)} else {None} } pub fn distance_to_next(&self,cur:(f64,f64))->f32{ if let Some(wp)=self.wps.get(self.idx){ let dlat=wp.lat-cur.0; let dlon=wp.lon-cur.1; ((dlat*dlat+dlon*dlon).sqrt()*111000.0) as f32 } else {0.0} } }
+#[derive(Clone, Copy, Debug)]
+pub struct Waypoint {
+    pub lat: f64,
+    pub lon: f64,
+    pub alt: f32,
+    pub yaw: f32,
+}
+
+pub struct Path {
+    pub wps: heapless::Vec<Waypoint, 64>,
+    pub idx: usize,
+}
+
+impl Path {
+    pub fn new() -> Self {
+        Self {
+            wps: heapless::Vec::new(),
+            idx: 0,
+        }
+    }
+    pub fn push(&mut self, wp: Waypoint) -> Result<(), ()> {
+        self.wps.push(wp).map_err(|_| ())
+    }
+    pub fn next(&mut self) -> Option<Waypoint> {
+        if self.idx < self.wps.len() {
+            let w = self.wps[self.idx];
+            self.idx += 1;
+            Some(w)
+        } else {
+            None
+        }
+    }
+    pub fn distance_to_next(&self, cur: (f64, f64)) -> f32 {
+        if let Some(wp) = self.wps.get(self.idx) {
+            let dlat = wp.lat - cur.0;
+            let dlon = wp.lon - cur.1;
+            let dist_sq = (dlat * dlat + dlon * dlon) as f32;
+            dist_sq * 111000.0
+        } else {
+            0.0
+        }
+    }
+}

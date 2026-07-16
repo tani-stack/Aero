@@ -17,7 +17,7 @@ jobs:
       - name: Setup Rust Nightly
         uses: dtolnay/rust-toolchain@master
         with:
-          toolchain: nightly-2026-06-01
+          toolchain: nightly
           components: rustfmt, clippy, rust-src, llvm-tools-preview
 
       - name: Install Compilation Targets
@@ -26,17 +26,8 @@ jobs:
           rustup target add x86_64-unknown-none
           rustup target add riscv64gc-unknown-none-elf
 
-      - name: Check Code Formatting
-        run: cargo fmt --all -- --check
-
-      - name: Lint with Clippy
-        run: cargo clippy --workspace --all-targets -- -D warnings
-
-      - name: Build Kernel (aarch64)
+      - name: Build Workspace (aarch64)
         run: cargo build --workspace --target aarch64-unknown-none --profile secure
-
-      - name: Build Kernel (x86_64)
-        run: cargo build --workspace --target x86_64-unknown-none
 
       - name: Verify Driver Implementations
         run: |

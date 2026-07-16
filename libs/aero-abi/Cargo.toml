@@ -1,1 +1,7 @@
-[package] name="aero-abi" version.workspace=true edition.workspace=true
+[package]
+name = "aero-abi"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+aero-types = { workspace = true }

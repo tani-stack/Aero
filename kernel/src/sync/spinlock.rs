@@ -1,1 +1,1 @@
-pub use spin::{Mutex,RwLock};
+pub use spin::{Mutex, RwLock};

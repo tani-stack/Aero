@@ -1,4 +1,8 @@
-[package] name="aero-drivers" version.workspace=true edition.workspace=true
+[package]
+name = "aero-drivers"
+version.workspace = true
+edition.workspace = true
+
 [dependencies]
-aero-types = { workspace=true }
-bitflags = { workspace=true }
+aero-types = { workspace = true }
+bitflags = { workspace = true }

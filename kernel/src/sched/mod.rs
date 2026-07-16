@@ -1,1 +1,9 @@
-pub mod task; pub mod scheduler; pub mod idle; pub use scheduler::{init,spawn,tick}; pub fn init(){ scheduler::init(); }
+pub mod idle;
+pub mod scheduler;
+pub mod task;
+
+pub use scheduler::{spawn, tick};
+
+pub fn init() {
+    scheduler::init();
+}

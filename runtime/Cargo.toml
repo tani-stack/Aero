@@ -1,2 +1,9 @@
-[package] name="aero-runtime" version.workspace=true edition.workspace=true
-[dependencies] aero-types = { workspace=true } heapless = { workspace=true } spin = { workspace=true }
+[package]
+name = "aero-runtime"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+aero-types = { workspace = true }
+heapless = { workspace = true }
+spin = { workspace = true }

@@ -1,1 +1,9 @@
-pub trait UartBus { fn write_byte(&mut self, b:u8); fn read_byte(&mut self)->Option<u8>; fn write(&mut self, s:&[u8]){ for &b in s { self.write_byte(b) } } }
+pub trait UartBus {
+    fn write_byte(&mut self, b: u8);
+    fn read_byte(&mut self) -> Option<u8>;
+    fn write(&mut self, s: &[u8]) {
+        for &b in s {
+            self.write_byte(b)
+        }
+    }
+}

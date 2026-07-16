@@ -1,2 +1,9 @@
-[package] name="aero-services" version.workspace=true edition.workspace=true
-[dependencies] aero-types = { workspace=true } aero-drivers = { path="../drivers" } heapless = { workspace=true }
+[package]
+name = "aero-services"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+aero-types = { workspace = true }
+aero-drivers = { path = "../drivers" }
+heapless = { workspace = true }

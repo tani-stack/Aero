@@ -1,1 +1,7 @@
-pub fn idle_task()->!{ loop{ unsafe{core::arch::asm!("wfi",options(nomem,nostack));} } }
+pub fn idle_task() -> ! {
+    loop {
+        unsafe {
+            core::arch::asm!("wfi", options(nomem, nostack));
+        }
+    }
+}

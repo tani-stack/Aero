@@ -1,2 +1,11 @@
-pub mod traits; pub mod motor; pub mod imu; pub mod gps; pub mod lidar; pub mod barometer; pub mod camera; pub mod bus;
+#![no_std]
+pub mod barometer;
+pub mod bus;
+pub mod camera;
+pub mod gps;
+pub mod imu;
+pub mod lidar;
+pub mod motor;
+pub mod traits;
+
 pub use traits::Driver;
