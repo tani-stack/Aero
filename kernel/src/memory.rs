@@ -115,3 +115,4 @@ impl PageTable {
         Some(PhysicalAddress(phys_addr))
     }
 }
+// Advanced memory allocation strategies
