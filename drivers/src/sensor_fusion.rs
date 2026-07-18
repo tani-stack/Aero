@@ -1,5 +1,5 @@
-//! IMU Calibration & Fusion
-//! Calibration algorithms and multi-sensor fusion
+//! Sensor Fusion - Kalman Filter & Multi-sensor Integration
+//! IMU calibration, GPS-IMU fusion, magnetometer fusion
 
 use vortex_types::VortexResult;
 
@@ -30,7 +30,6 @@ impl ImuCalibrator {
     }
 
     pub fn calibrate_gyro(&mut self, samples: &[[f32; 3]]) {
-        // Average gyro readings while still
         let mut sum = [0.0; 3];
         for sample in samples {
             sum[0] += sample[0];
@@ -43,7 +42,6 @@ impl ImuCalibrator {
     }
 
     pub fn calibrate_accel(&mut self, samples: &[[f32; 3]]) {
-        // Place sensor on 6 faces and record readings
         let mut sum = [0.0; 3];
         for sample in samples {
             sum[0] += sample[0];
@@ -56,11 +54,41 @@ impl ImuCalibrator {
     }
 
     pub fn apply_calibration(&self, accel: &mut [f32; 3], gyro: &mut [f32; 3]) {
-        // Apply calibration offsets
         for i in 0..3 {
             accel[i] -= self.accel_bias[i];
             gyro[i] -= self.gyro_bias[i];
         }
+    }
+}
+
+/// Kalman Filter for sensor fusion
+pub struct KalmanFilter {
+    q_matrix: f32,  // Process noise
+    r_matrix: f32,  // Measurement noise
+    state: f32,
+    covariance: f32,
+}
+
+impl KalmanFilter {
+    pub fn new(q: f32, r: f32) -> Self {
+        Self {
+            q_matrix: q,
+            r_matrix: r,
+            state: 0.0,
+            covariance: 1.0,
+        }
+    }
+
+    pub fn update(&mut self, measurement: f32) -> f32 {
+        // Predict
+        self.covariance += self.q_matrix;
+        
+        // Update
+        let kalman_gain = self.covariance / (self.covariance + self.r_matrix);
+        self.state += kalman_gain * (measurement - self.state);
+        self.covariance = (1.0 - kalman_gain) * self.covariance;
+        
+        self.state
     }
 }
 
